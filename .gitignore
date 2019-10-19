@@ -9,6 +9,8 @@
 *.Rproj.user
 .RData
 .Rhistory
+OpenCPU_Tutorial.html
 
 # Package
 *.tar.gz
+.Rproj.user
