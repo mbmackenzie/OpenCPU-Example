@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>PlotDist</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Java Script-->
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.opencpu.org/opencpu-0.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="btns.js"></script>
+    
+    <div class="jumbotron">
+        <div class="container text-center">
+            <h1>Plotting Distributions</h1>
+            <p>An Example with R and OpenCPU</p>
+            <h3>
+                <span id='view_n'></span> Sample(s) from 
+                <span id='view_d'></span> Distribution</h3>
+        </div>
+    </div>
+
+    <div class="container-fluid text-center">
+        <div class="row content">
+            <div class="col-sm-3">
+                <div class="row content well distside">
+                    <div class="col-sm-12 well">
+                        <button type="button" class="distbtn" id='unifbtn' value="Uniform">
+                            <h5>Uniform</h5>
+                        </button>
+                    </div>
+                    <div class="col-sm-12 well">
+                        <button type="button" class="distbtn" id='normbtn' value="Normal">
+                            <h5>Normal</h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 text-left">
+                <div class="slide-container" style="width: 100%;">
+                    <input type="range" min="1" max="1000" value="500" class="slider" id="n_val" style="width: 100%;">
+                </div>
+                <div id="plotdiv"></div>
+            </div>
+            <div class="col-sm-3">
+                <div class="row content well distside">
+                    <div class="col-sm-12 well">
+                        <button type="button" class="distbtn" id='chisqbtn' value="chisq">
+                            <h5>Chi-Square</h5>
+                        </button>
+                    </div>
+                    <div class="col-sm-12 well">
+                        <button type="button" class="distbtn" id='expbtn' value="exp">
+                            <h5>Exponential</h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="container-fluid text-center">
+        <p>Footer</p>
+    </footer>
+</body>
+
+</html>

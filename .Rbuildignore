@@ -1,0 +1,6 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.RData$
+^\.Rhistory$
+OpenCPU_Tutorial.Rmd
+build_and_run.R

@@ -1,0 +1,14 @@
+# Mac OS
+.DS_Store
+
+# VS Code
+*.code-workspace
+.vscode
+
+# RStudio
+*.Rproj.user
+.RData
+.Rhistory
+
+# Package
+*.tar.gz

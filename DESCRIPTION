@@ -1,0 +1,10 @@
+Package: distogram
+Type: Package
+Title: Distogram application for OpenCPU
+Version: 0.1
+Date: 2019-10-18
+Author: Matt Mackenzie
+Maintainer: Matt Mackenzie <mbm2228@columbia.edu>
+Description: OpenCPU app to plot histograms of various probability distributions. 
+License: MIT
+RoxygenNote: 6.1.1
