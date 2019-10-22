@@ -32,7 +32,7 @@ plotdist <- function(n, dist, ..., name = "", kde = FALSE) {
   
   #check dist is valid
   dist <- tolower(dist)
-  possible_distributions = c('unif', 'norm', 'chisq', 'exp', 't')
+  possible_distributions = c('unif', 'norm', 'chisq', 'exp', 't', 'f')
   if (!(dist %in% possible_distributions)) {
     stop(sprintf("'%s' is not an allowed distribution.", dist))
   }
@@ -60,6 +60,10 @@ plotdist <- function(n, dist, ..., name = "", kde = FALSE) {
     if (is.null(r_params$df)) r_params$df <- 1
     if (is.null(r_params$ncp)) r_params$ncp <- 0
     funcs <- list(r = rt, d = dt)
+  } else if (dist == 'f') {
+    if (is.null(r_params$df1)) r_params$df1 <- 1
+    if (is.null(r_params$df2)) r_params$df2 <- 1
+    funcs <- list(r = rf, d = df)
   }
   
   x <- do.call(funcs$r, r_params)
