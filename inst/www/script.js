@@ -91,8 +91,8 @@ $(function () {
     $("#fbtn").on('click', {
         dist: "f",
         name: "F",
-        fdf1: "getParamValue-fdf1",
-        fdf2: "getParamValue-fdf2"
+        df1: "getParamValue-fdf1",
+        df2: "getParamValue-fdf2"
     }, doClick)
 
     $("#n_val").on('input', doSlide);
