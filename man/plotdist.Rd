@@ -4,7 +4,7 @@
 \alias{plotdist}
 \title{Plot Different Probability Distributions}
 \usage{
-plotdist(n, dist, ..., kde = FALSE)
+plotdist(n, dist, ..., name = "", kde = FALSE)
 }
 \arguments{
 \item{n}{number of sampled elements, n > 0}
@@ -12,6 +12,8 @@ plotdist(n, dist, ..., kde = FALSE)
 \item{dist}{abbreviation for different distributions}
 
 \item{...}{optional parameters for different distributions}
+
+\item{name}{The name of the distribution}
 
 \item{kde}{draw a kernal density on top of the histogram}
 }
@@ -23,6 +25,7 @@ Possible Distributions:
   \item 'norm' -> Normal(mean, sd)
   \item 'chisq' -> Chi-Squared(df)
   \item 'exp' -> Exponential(rate)
+  \item 'bin' -> Binomial(prob)
 }
 }
 \examples{

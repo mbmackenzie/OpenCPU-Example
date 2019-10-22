@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Data Visualization with OpenCPU
 ##### Columbia University - STAT 5702
 ##### 2019 EDAV Community Contribution
@@ -55,16 +60,62 @@ RoxygenNote: 6.1.1
 ```
 
 #### /R
-The `/R` directory is responsible for holding the necessary code. 
+The `/R` directory is responsible for holding the R code for the package. Naming of the files does not matter here, as we will just be referring to the names of functions. Anything that you need the app to do should be put into functions that accept whatever arguments necessary. Remember, this is a standalone package in R, so write your code as if you were not just doing this for a web app. 
 
+To start off the Distogram example, I will briefly go over the purpose and little bit of code in this example. As stated above, the example is an app to plot different distributions with a varying number of samples. So from this, I needed a function that takes in as arguments:
 
+- Number of samples
+- Name of distribution
+- Any parameters for that distribution
+- (though not necessary) a boolean to indicate whether a kde should be drawn aswell
 
+The gist of the code looks like this:
+```{r}
+plotdist <- function(n, dist, ..., kde = FALSE) {
+  # extract params from ... args
+  params <- list(...)
+  
+  # if norm, do this... 
+  # in the actual code there are other cases too
+  if (dist == 'norm') {
+    if (is.null(params$mean)) params$mean <- 0
+    if (is.null(params$sd)) params$sd <- 1
+    x <- rnorm(n, mean = params$mean, sd = params$sd)
+  }
+  
+  # return the histogram
+  hist(x)
+}
+```
 
+And the output would look like this for a normal distribution:
+```{r}
+plotdist(500, 'norm', mean = 30, sd = 4)
+```
 
+#### /man and NAMESPACE
+the `man` folder contains documentaion in `*.Rd` files, and NAMESPACE contains, basically, how the package will interact with other packages. Luckily(!), if you use `devtools`, you dont have to do anything but tell devtools to do this part. To do this fist install `devtools` and `roxygen2`...
 
+##### CRAN:
+```{r, eval=FALSE}
+install.packages("devtools")
+install.packages("roxygen2")
+```
 
+##### conda:
+```{bash, eval=FALSE}
+conda install -c conda-forge r-devtools
+conda install -c r r-roxygen2
+```
 
+Next, to actually generate the documention, be in the directory of the package, and simply run:
 
+```{r, eval=FALSE}
+devtools::document()
+```
+
+#### /inst/www
+This is where any HTML, CSS, and JavaScript will go.  
 
 
 

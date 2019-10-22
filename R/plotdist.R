@@ -1,3 +1,5 @@
+library(ggplot2)
+
 #' Plot Different Probability Distributions
 #' 
 #' Plot a histogram of n elements sampled from various distributions.
@@ -7,11 +9,13 @@
 #'   \item 'norm' -> Normal(mean, sd)
 #'   \item 'chisq' -> Chi-Squared(df)
 #'   \item 'exp' -> Exponential(rate)
+#'   \item 'bin' -> Binomial(prob)
 #' }
 #' 
 #' @param n number of sampled elements, n > 0
 #' @param dist abbreviation for different distributions
 #' @param ... optional parameters for different distributions
+#' @param name The name of the distribution
 #' @param kde draw a kernal density on top of the histogram
 #' @author Matt Mackenzie
 #' @export
@@ -20,7 +24,7 @@
 #' plotdist(100, 'norm', mean = 5, sd = 2)
 #' plotdist(500, 'chisq', df = 5)
 #' plotdist(10, 'exp', rate = 3)
-plotdist <- function(n, dist, ..., kde = FALSE) {
+plotdist <- function(n, dist, ..., name = "", kde = FALSE) {
   # check n is valid
   if ((!is.numeric(n)) || (round(n) != n) | (n <= 0)) {
     stop("n must be a positive non-zero integer.")
@@ -28,39 +32,46 @@ plotdist <- function(n, dist, ..., kde = FALSE) {
   
   #check dist is valid
   dist <- tolower(dist)
-  possible_distributions = c('unif', 'norm', 'chisq', 'exp')
+  possible_distributions = c('unif', 'norm', 'chisq', 'exp', 't')
   if (!(dist %in% possible_distributions)) {
     stop(sprintf("'%s' is not an allowed distribution.", dist))
   }
   
-  # extract params from ... args
-  params <- list(...)
+  # extract r_params from ... args
+  r_params <- c(list(...), list(n = n))
+  func <- NA
   
-  # create sample for correct dist and correct params as needed
+  # create sample for correct dist and correct r_params as needed
   if (dist == 'unif') {
-    if (is.null(params$min)) params$min <- 0
-    if (is.null(params$max)) params$max <- as.numeric(params$min) + 1
-    x <- runif(n, min = params$min, max = params$max)
+    if (is.null(r_params$min)) r_params$min <- 0
+    if (is.null(r_params$max)) r_params$max <- as.numeric(r_params$min) + 1
+    funcs <- list(r = runif, d = dunif)
   } else if (dist == 'norm') {
-    if (is.null(params$mean)) params$mean <- 0
-    if (is.null(params$sd)) params$sd <- 1
-    x <- rnorm(n, mean = params$mean, sd = params$sd)
+    if (is.null(r_params$mean)) r_params$mean <- 0
+    if (is.null(r_params$sd)) r_params$sd <- 1
+    funcs <- list(r = rnorm, d = dnorm)
   } else if (dist == 'chisq') {
-    if (is.null(params$df)) params$df <- 1
-    x <- rchisq(n, params$df)
+    if (is.null(r_params$df)) r_params$df <- 1
+    funcs <- list(r = rchisq, d = dchisq)
   } else if (dist == 'exp') {
-    if (is.null(params$rate)) params$rate <- 1
-    x <- rexp(n, rate = params$rate)
+    if (is.null(r_params$rate)) r_params$rate <- 1
+    funcs <- list(r = rexp, d = dexp)
+  } else if (dist == 't') {
+    if (is.null(r_params$df)) r_params$df <- 1
+    if (is.null(r_params$ncp)) r_params$ncp <- 0
+    funcs <- list(r = rt, d = dt)
   }
-  hist(x)
+  
+  x <- do.call(funcs$r, r_params)
+  h <- hist(x, xlab = "", ylab = "Count", main = paste("Histogram of", name, "Data"))
+  
+  if (kde) {
+    s <- seq(min(x), max(x), length=50)
+    d_params <- r_params
+    d_params$n <- NULL
+    d_params$x <- s
+    X <- do.call(funcs$d, d_params)
+    X <- X * diff(h$mids[1:2]) * n
+    lines(s, X, col = "blue", lwd = 2)
+  }
 }
-
-
-
-
-
-
-
-
-
-
