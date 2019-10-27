@@ -1,5 +1,3 @@
-library(ggplot2)
-
 #' Plot Different Probability Distributions
 #' 
 #' Plot a histogram of n elements sampled from various distributions.
@@ -39,7 +37,6 @@ plotdist <- function(n, dist, ..., name = "", kde = FALSE) {
   
   # extract r_params from ... args
   r_params <- c(list(...), list(n = n))
-  func <- NA
   
   # create sample for correct dist and correct r_params as needed
   if (dist == 'unif') {

@@ -10,11 +10,9 @@ $(function () {
     $("#view_n").html(n_samples);
     $("#view_d").html(dist_name);
 
-    function runR(data) {
-
-        console.log(data);
-
-        let req = $("#plotdiv").rplot("plotdist", data).fail(function () {
+    function runR(params) {
+        console.log(params);
+        let req = $("#plotdiv").rplot("plotdist", params).fail(function () {
             alert("HTTP error " + req.status + ": " + req.responseText);
         });
     }
