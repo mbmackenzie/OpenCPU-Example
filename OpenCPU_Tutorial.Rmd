@@ -1,12 +1,14 @@
 ---
 title: "Data Visualization with OpenCPU"
 author: Matt Mackenzie
-output: md_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 # Data Visualization with OpenCPU
-##### Columbia University - STAT 5702
-##### 2019 EDAV Community Contribution
+<!-- ##### Columbia University - STAT 5702 -->
+<!-- ##### 2019 EDAV Community Contribution -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

@@ -1,10 +1,8 @@
 Data Visualization with OpenCPU
 ===============================
 
-##### Columbia University - STAT 5702
-
-##### 2019 EDAV Community Contribution
-
+<!-- ##### Columbia University - STAT 5702 -->
+<!-- ##### 2019 EDAV Community Contribution -->
 Introduction
 ------------
 
@@ -69,20 +67,22 @@ the main point is OpenCPU, all the code is on github
 The file structure of this dysfunctional app will be something like
 this.
 
-    .
-    ├── DESCRIPTION
-    ├── LICENSE
-    ├── NAMESPACE
-    ├── R
-    │   └── script.R
-    ├── README.md
-    ├── inst
-    │   └── www
-    │       ├── script
-    │       ├── index.html
-    │       └── style.css
-    └── man
-        └── script.Rd
+``` bash
+.
+├── DESCRIPTION
+├── LICENSE
+├── NAMESPACE
+├── R
+│   └── script.R
+├── README.md
+├── inst
+│   └── www
+│       ├── script
+│       ├── index.html
+│       └── style.css
+└── man
+    └── script.Rd
+```
 
 ### Standalone Package
 
@@ -130,28 +130,32 @@ So from this, I needed a function that takes in as arguments:
 
 The gist of the code looks like this:
 
-    plotdist <- function(n, dist, ..., kde = FALSE) {
-      # extract params from ... args
-      r_params <- c(list(...), list(n = n))
-      
-      # if norm, do this... 
-      # in the actual code there are other cases too
-      if (dist == 'norm') {
-        if (is.null(r_params$mean)) r_params$mean <- 0
-        if (is.null(r_params$sd)) r_params$sd <- 1
-        funcs = list(r = rnorm, d = dnorm)
-      }
+``` r
+plotdist <- function(n, dist, ..., kde = FALSE) {
+  # extract params from ... args
+  r_params <- c(list(...), list(n = n))
+  
+  # if norm, do this... 
+  # in the actual code there are other cases too
+  if (dist == 'norm') {
+    if (is.null(r_params$mean)) r_params$mean <- 0
+    if (is.null(r_params$sd)) r_params$sd <- 1
+    funcs = list(r = rnorm, d = dnorm)
+  }
 
-      # sample from desired distribution
-      x <- do.call(funcs$r, r_params)
-      
-      # return the histogram
-      hist(x)
-    }
+  # sample from desired distribution
+  x <- do.call(funcs$r, r_params)
+  
+  # return the histogram
+  hist(x)
+}
+```
 
 And the output would look like this for a normal distribution:
 
-    plotdist(500, 'norm', mean = 30, sd = 4)
+``` r
+plotdist(500, 'norm', mean = 30, sd = 4)
+```
 
 ![](figs/plotdist-ex.png)
 
@@ -165,18 +169,24 @@ devtools to do this part. To do this fist install `devtools` and
 
 ##### CRAN:
 
-    install.packages("devtools")
-    install.packages("roxygen2")
+``` r
+install.packages("devtools")
+install.packages("roxygen2")
+```
 
 ##### conda:
 
-    conda install -c conda-forge r-devtools
-    conda install -c r r-roxygen2
+``` bash
+conda install -c conda-forge r-devtools
+conda install -c r r-roxygen2
+```
 
 Next, to actually generate the documention, be in the directory of the
 package, and simply run:
 
-    devtools::document()
+``` r
+devtools::document()
+```
 
 #### /inst/www
 
@@ -192,14 +202,15 @@ When you are designing the web page, you should create a `div` element
 with the id “plotdiv.” This will be where the plots created in R are
 rendered in the browser.
 
-```html
+``` html
 <div id="plotdiv"></div>
 ```
+
 Moving along with the example, I used bootstrap for creating the web
 page. The necessary tags for bootstrap are are something like the
 following:
 
-```html
+``` html
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 ```
@@ -215,13 +226,15 @@ in the file index.html on github.
 
 A good place to start with the JavaScript is to create a file
 *script.js* and in it put the following:
-```javascript
+
+``` javascript
 $(function () {
     $("#plotdiv").resizable()
-    
+  
     // CODE
 }
 ```
+
 The interactivity of the page is done with JavaScript. Since OpenCPU.js
 is built on JQuery, that is the library I reccomend using for
 interacting. All other JavaScript code is put inside this function where
@@ -233,7 +246,7 @@ these calls. I settled on using buttons to trigger events, and I created
 the function `doClick` that handled what happened with a button is
 clicked.
 
-```javascript
+``` javascript
 function doClick(event) {
     Object.entries(event.data).forEach(([key, value]) => {
         if (value.startsWith("getParamValue")) {
@@ -246,6 +259,7 @@ function doClick(event) {
     // runR(params);
 };
 ```
+
 The above basically takes in a list of parameters, then creates a new
 object filled with parameters to send to R. The function `runR` will be
 discussed later, so in this standalone version the parameters are logged
@@ -256,12 +270,14 @@ sent. From here, I could get whatever values I needed. To make this
 clear, below is the code that binds the uniform distribution button and
 `doClick` event.
 
-    $("#unifbtn").on('click', {
-        dist: "unif",
-        name: "Uniform",
-        min: "getParamValue-unifmin",
-        max: "getParamValue-unifmax"
-    }, doClick)
+``` javascript
+$("#unifbtn").on('click', {
+    dist: "unif",
+    name: "Uniform",
+    min: "getParamValue-unifmin",
+    max: "getParamValue-unifmax"
+}, doClick)
+```
 
 Since the min and max values are parameters that the user can change,
 when the button is clicked, the current values set by the user are sent
@@ -295,9 +311,11 @@ In order for OpenCPU to run your R code we need two things.
 First things first, the script tags that make everything work are the
 following.
 
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://cdn.opencpu.org/opencpu-0.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+``` html
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdn.opencpu.org/opencpu-0.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+```
 
 As versioning changes, consult <https://www.opencpu.org/jslib.html> for
 the most recent stable libraries. The first two tags are absolutely
@@ -320,10 +338,12 @@ this error handling is important. Things will naturally break and
 require debugging, so here is a handy thing to do when using these
 functions.
 
-    let req = <some_opencpu_function>
-    req.fail(function () {
-        alert("HTTP error " + req.status + ": " + req.responseText);
-    });
+``` javascript
+let req = <some_opencpu_function>
+req.fail(function () {
+    alert("HTTP error " + req.status + ": " + req.responseText);
+});
+```
 
 If you add the `.fail` part, you will have a better idea of what went
 wrong when it does go wrong. When I get to the distogram example, you
@@ -336,7 +356,9 @@ function takes 2 main arguments, the name of the function to call, and
 the parameters to call that function with. Though parameters are not
 required, most cituations will need some type of parameterization.
 
-    $("#plotdiv").rplot( fun, [, args ] [, callback ])
+``` javascript
+$("#plotdiv").rplot( fun, [, args ] [, callback ])
+```
 
 -   `fun` is the function name.
 -   `args` is an object with the parameter names as the object keys and
@@ -350,7 +372,9 @@ function that returns a character output to the browser, use this.
 Distogram does not utilize this function, but the `runR` function above
 could be modified easily to utilize this.
 
-    ocpu.rpc( fun, [, args ] [, complete ] )
+``` javascript
+ocpu.rpc( fun, [, args ] [, complete ] )
+```
 
 -   `fun` is the function name.
 -   `args` is an object (see above).
@@ -362,21 +386,25 @@ example, say you wanted to compute the standard deviation of a list of
 values, call it `myData`. You could use the function `sd` in R to
 compute the standard deviation.
 
-    var req = ocpu.rpc("sd", {
-        x: mydata
-    }, function(output){
-        console.log("Standard Deviation equals: " + output);
-    });
+``` javascript
+var req = ocpu.rpc("sd", {
+    x: mydata
+}, function(output){
+    console.log("Standard Deviation equals: " + output);
+});
+```
 
 ### distogram.js::runR
 
 My method of utilizing `rplot` in distogram is this following function:
 
-    function runR(params) {
-        let req = $("#plotdiv").rplot("plotdist", params).fail(function () {
-            alert("HTTP error " + req.status + ": " + req.responseText);
-        });
-    }
+``` javascript
+function runR(params) {
+    let req = $("#plotdiv").rplot("plotdist", params).fail(function () {
+        alert("HTTP error " + req.status + ": " + req.responseText);
+    });
+}
+```
 
 Above the previous section where I went through some of the JavaScript
 code, this function is called in `doClick`, and will send all the
@@ -392,11 +420,15 @@ is a locally run server using the OpenCPU R package.
 
 ##### CRAN:
 
-    install.packages("opencpu")
+``` r
+install.packages("opencpu")
+```
 
 ##### conda:
 
-    conda install -c conda-forge r-opencpu
+``` bash
+conda install -c conda-forge r-opencpu
+```
 
 Once installed, this packages offers functions to launch your own apps
 for development purposes or launch already made apps locally. This
@@ -409,17 +441,21 @@ Building a package is very easy with devtools, and since in previous
 sections created a properly build-able package, this part should be
 easy. Run the following commands inside the directory of the package.
 
-    library(devtools)
-    build()
-    install()
+``` r
+library(devtools)
+build()
+install()
 
-    library([package_name])
+library([package_name])
+```
 
 ### Starting the Server
 
 OpenCPU provides a function to point to a package and start the server.
 
-    ocpu_start_app("[package_name]", no_cache = TRUE)
+``` r
+ocpu_start_app("[package_name]", no_cache = TRUE)
+```
 
 When you run this line, a new local host instance of your app will
 start, and in my experience open in a new browser. One major issure I
