@@ -3,6 +3,7 @@ Data Visualization with OpenCPU
 
 <!-- ##### Columbia University - STAT 5702 -->
 <!-- ##### 2019 EDAV Community Contribution -->
+
 Introduction
 ------------
 
@@ -25,8 +26,8 @@ actually creating an OpenCPU app, so this tutorial will attempt to piece
 what information is available together by working through an example
 project. There are 4 major steps involved:
 
--   [Creating a Disfunctional App](#creating-a-disfunctional-app):
-    creating an R package to acomplish the data processing we need and
+-   [Creating a Dysfunctional App](#creating-a-dysfunctional-app):
+    creating an R package to accomplish the data processing we need and
     the HTML for the user to interact with,
 -   [OpenCPU.js](#opencpu.js): connecting the HTML to the R package with
     the OpenCPU JavaScript library,
@@ -55,7 +56,7 @@ towards, please visit
 <a href="https://mbmackenzie.ocpu.io/distogram" target="_blank">mbmackenzie/distogram</a>
 to view this project.
 
-Creating a Disfunctional App
+Creating a Dysfunctional App
 ----------------------------
 
 The first step in creating an OpenCPU app is to fist create an app that
@@ -181,7 +182,7 @@ conda install -c conda-forge r-devtools
 conda install -c r r-roxygen2
 ```
 
-Next, to actually generate the documention, be in the directory of the
+Next, to actually generate the documentation, be in the directory of the
 package, and simply run:
 
 ``` r
@@ -320,8 +321,8 @@ following.
 As versioning changes, consult <https://www.opencpu.org/jslib.html> for
 the most recent stable libraries. The first two tags are absolutely
 necessary, the third is not… unless you started with the code
-reccomended in the JavaScript section, as `.resizable` is a part of
-jquery-ui.js. I should mention that OpenCPU reccomends downloading the
+recommended in the JavaScript section, as `.resizable` is a part of
+jquery-ui.js. I should mention that OpenCPU recommends downloading the
 js files and storing them in the project directly, and you should do
 this if you do not want to deal with constantly changing libraries and
 compatability problems. (…I did not do this in distogram)
@@ -494,4 +495,4 @@ Webhook.’
 And finally click ‘Add Webhook’ at the bottom of the page. In a matter
 of seconds to minutes, so long as everything builds properly, your app
 will be hosted at
-“<https://%5Byour_github_username%5D.ocpu.io/%5Bgithub_project_name%5D>”.
+“<span>https://</span>your_github_username.ocpu.io/github_project_name”.
